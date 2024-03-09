@@ -7,4 +7,13 @@ pipeline {
         // Enable timestamp at each job in the pipeline
         timestamps()
     }
+
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building...'
+                echo 'Building successful!'
+            }
+        }
+    }
 }
