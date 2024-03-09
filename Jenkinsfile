@@ -11,16 +11,6 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                // Checkout the repository
-                checkout scm
-
-                script {
-                    def jenkinsfilePath = "jenkins/Jenkinsfile"
-
-                    load jenkinsfilePath
-                }
-            }
-            steps {
                 echo 'Building...'
                 echo 'Building successful!'
             }
