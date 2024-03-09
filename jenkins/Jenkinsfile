@@ -11,9 +11,30 @@ pipeline {
     stages {
         stage('Build') {
             steps {
+                // Checkout the repository
+                checkout scm
+
+                script {
+                    def jenkinsfilePath = "jenkins/Jenkinsfile"
+
+                    load jenkinsfilePath
+                }
+            }
+            steps {
                 echo 'Building...'
                 echo 'Building successful!'
             }
+        }
+    }
+    post {
+        success {
+            echo 'Pipeline succeeded! Congratulations!'
+        }
+        failure {
+            echo 'Pipeline failed! Please check logs for details.'
+        }
+        always {
+            echo 'Cleaning up...'
         }
     }
 }
