@@ -4,7 +4,7 @@ import torchvision.transforms as T
 
 from pathlib import Path
 
-from models.cnn_to_rnn import CNNtoRNN
+from src.models.cnn_to_rnn import CNNtoRNN
 from .get_latest_model import get_latest_and_highest_score_model
 
 
