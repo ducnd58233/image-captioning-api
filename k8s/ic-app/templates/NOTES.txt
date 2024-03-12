@@ -1,0 +1,4 @@
+1. Get the application URL by running these commands:
+export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "ic-app.fullname" . }})
+kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 5000:30000
+echo "Visit http://127.0.0.1:5000 to use your application"
