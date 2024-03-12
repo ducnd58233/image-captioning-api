@@ -1,7 +1,7 @@
 from fastapi import FastAPI, File, UploadFile
 from io import BytesIO
 from PIL import Image
-from .services.image_caption_generator import predict
+from src.services.image_caption_generator import predict
 from transformers import VisionEncoderDecoderModel, ViTImageProcessor, AutoTokenizer
 
 model = VisionEncoderDecoderModel.from_pretrained(

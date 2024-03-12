@@ -8,10 +8,24 @@ pipeline {
         timestamps()
     }
 
+    environment{
+        registry = 'jigglediggle1/image-captioning'
+        registryCredential = 'dockerhub'
+    }
+
     stages {
         stage('Build') {
             steps {
                 echo 'Building...'
+                script {
+                    echo 'Building image for deployment..'
+                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                    echo 'Pushing image to dockerhub..'
+                    docker.withRegistry( '', registryCredential ) {
+                        dockerImage.push()
+                        dockerImage.push('latest')
+                    }
+                }
                 echo 'Building successful!'
             }
         }

@@ -10,8 +10,6 @@ from .get_latest_model import get_latest_and_highest_score_model
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
 INPUT_SIZE = (384, 384)
 EMBED_SIZE = 256
 HIDDEN_SIZE = 256
@@ -24,5 +22,7 @@ with open(f"{BASE_DIR}/models/vocab.json") as f:
     VOCABULARY_DICT = json.load(f)
 
 AI_MODEL = CNNtoRNN(EMBED_SIZE, HIDDEN_SIZE, len(VOCABULARY_DICT["itos"]), NUM_LAYERS)
-AI_MODEL.load_state_dict(torch.load(WEIGHT)["model_state_dict"])
+AI_MODEL.load_state_dict(
+    torch.load(WEIGHT, map_location=torch.device("cpu"))["model_state_dict"]
+)
 AI_MODEL.eval()
