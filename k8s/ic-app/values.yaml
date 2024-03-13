@@ -1,0 +1,88 @@
+replicaCount: 1
+
+namespace: image-captioning
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Automatically mount a ServiceAccount's API credentials?
+  automount: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+
+image:
+  repository: jigglediggle1/image-captioning
+  pullPolicy: Always
+  tag: latest
+
+resources:
+  limits:
+    memory: 3Gi
+    cpu: 100m
+  requests:
+    memory: 3Gi
+    cpu: 100m
+
+containerPort: 80
+
+service:
+  type: ClusterIP
+  ports:
+    - port: 30000
+      name: icport
+      protocol: TCP
+      targetPort: 30000
+
+ingress:
+  enabled: false
+  className: ""
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /docs
+          pathType: Prefix
+          backend:
+            service:
+              port:
+                number: 30000
+        - path: /openapi.json
+          pathType: Prefix
+          backend:
+            service:
+              port:
+                number: 30000
+        - path: /v2/caption
+          pathType: Prefix
+          backend:
+            service:
+              port:
+                number: 30000
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local

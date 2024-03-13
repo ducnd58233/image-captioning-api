@@ -1,6 +1,6 @@
 import torchvision.transforms as T
 from PIL import Image
-from common.constants import AI_MODEL, INPUT_SIZE, VOCABULARY_DICT
+from src.common.constants import AI_MODEL, INPUT_SIZE, VOCABULARY_DICT
 
 def predict(file):
     transform = T.Compose(
