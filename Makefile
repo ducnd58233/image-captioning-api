@@ -13,3 +13,6 @@ run-jenkins:
 
 start-jenkins-compose:
 	docker compose -f ./jenkins/docker-compose.yaml up -d
+
+stop-jenkins-compose:
+	docker compose -f ./jenkins/docker-compose.yaml stop

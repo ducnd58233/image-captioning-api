@@ -24,7 +24,6 @@ pipeline {
                         dockerImage.push()
                         dockerImage.push('latest')
                     }
-                    echo 'Building successful!'
                 }
             }
         }
