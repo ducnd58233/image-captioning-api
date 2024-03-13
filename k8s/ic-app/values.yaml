@@ -77,7 +77,7 @@ ingress:
               port:
                 number: 30000
         - path: /v2/caption
-          pathType: Exact
+          pathType: Prefix
           backend:
             service:
               port:
