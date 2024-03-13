@@ -28,22 +28,24 @@ pipeline {
                 }
             }
         }
-    }
 
-    stage('Deploy') {
-        agent {
-            kubernetes {
-                containerTemplate {
-                    name 'helm' // Name of the container to be used for helm upgrade
-                    image 'jigglediggle1/jenkins' // The image containing helm
+        stage('Deploy') {
+            agent {
+                kubernetes {
+                    containerTemplate {
+                        name 'helm' // Name of the container to be used for helm upgrade
+                        image 'jigglediggle1/jenkins' // The image containing helm
+                    }
                 }
             }
-        }
-        steps {
-            echo 'Deploying...'
-            echo 'Deploying successful!'
+            steps {
+                echo 'Deploying...'
+                echo 'Deploying successful!'
+            }
         }
     }
+
+   
     post {
         success {
             echo 'Pipeline succeeded! Congratulations!'
