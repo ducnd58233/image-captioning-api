@@ -16,17 +16,16 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Building...'
                 script {
-                    echo 'Building image for deployment..'
+                    echo 'Building...'
                     dockerImage = docker.build registry + ":$BUILD_NUMBER"
                     echo 'Pushing image to dockerhub..'
                     docker.withRegistry( '', registryCredential ) {
                         dockerImage.push()
                         dockerImage.push('latest')
                     }
+                    echo 'Building successful!'
                 }
-                echo 'Building successful!'
             }
         }
     }
