@@ -2,6 +2,9 @@
 start-app-dev:
 	uvicorn src.main:app --reload
 
+start-app-tracer:
+	opentelemetry-instrument uvicorn src.main:app --reload
+
 start-app-docker:
 	docker build --tag "jigglediggle1/image-captioning" .
 	docker run -d --name="image-captioning" -p 30000:30000 "jigglediggle1/image-captioning"
@@ -16,3 +19,9 @@ start-jenkins-compose:
 
 stop-jenkins-compose:
 	docker compose -f ./jenkins/docker-compose.yaml stop
+
+start-monitoring-compose:
+	docker compose -f ./monitoring/docker-compose.yaml up -d
+
+stop-monitoring-compose:
+	docker compose -f ./monitoring/docker-compose.yaml stop
