@@ -5,12 +5,19 @@ from loguru import logger
 from src.services.image_caption_generator import predict
 from transformers import VisionEncoderDecoderModel, ViTImageProcessor, AutoTokenizer
 
-from opentelemetry import trace
+from opentelemetry import trace, metrics
 from opentelemetry.exporter.jaeger.thrift import JaegerExporter
 from opentelemetry.sdk.resources import SERVICE_NAME, Resource
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.trace import get_tracer_provider, set_tracer_provider
+
+from opentelemetry.exporter.prometheus import PrometheusMetricReader
+from opentelemetry.metrics import set_meter_provider
+from opentelemetry.sdk.metrics import MeterProvider
+from opentelemetry.sdk.resources import SERVICE_NAME, Resource
+
+from prometheus_client import start_http_server
 
 # Transformers model
 model = VisionEncoderDecoderModel.from_pretrained(
@@ -36,6 +43,33 @@ jaeger_exporter = JaegerExporter(
 )
 span_processor = BatchSpanProcessor(jaeger_exporter)
 get_tracer_provider().add_span_processor(span_processor)
+
+# Prometheus client
+# Start Prometheus client
+start_http_server(port=8099, addr="0.0.0.0")
+
+# Service name is required for most backends
+resource = Resource(attributes={SERVICE_NAME: "image-captioning"})
+
+# Exporter to export metrics to Prometheus
+reader = PrometheusMetricReader()
+
+# Meter is responsible for creating and recording metrics
+provider = MeterProvider(resource=resource, metric_readers=[reader])
+set_meter_provider(provider)
+meter = metrics.get_meter("ic-app", "latest")
+
+# Create your first counter
+counter = meter.create_counter(
+    name="ocr_request_counter", description="Number of OCR requests"
+)
+
+histogram = meter.create_histogram(
+    name="ocr_response_histogram",
+    description="OCR response histogram",
+    unit="seconds",
+)
+
 
 app = FastAPI()
 
